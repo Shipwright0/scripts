@@ -1,0 +1,22 @@
+#!/usr/bin/zsh
+
+#Theme changer to switch wallpaper, change pywal colors, and change 2bwm colors.
+
+#wallpaper
+. "${HOME}/scripts/gitscripts/theming/wpset"
+
+#Run pywal for new background and external scripts to load additional Xresources# colors
+#wal -n -q -i $wallpaper	-o ${HOME}/scripts/localscripts/theming/rldrsc_twobwm 
+
+##relaunch bar to apply colors
+if xdo id -a bspwm_bar >/dev/null 2>&1; then
+    pkill -TERM -f "${HOME}/syscomps/bar/bspwmbar/panel$"
+    while xdo id -a bspwm_bar >/dev/null 2>&1; do sleep 0.1; done
+    setsid "${HOME}/syscomps/bar/bspwmbar/panel" >/dev/null 2>&1 </dev/null &
+fi
+
+#apply new bspwm colors
+${HOME}/scripts/gitscripts/theming/rldrsc_bspwm $
+#relaunch dunst
+dunstctl reload &
+#END

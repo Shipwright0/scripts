@@ -1,0 +1,23 @@
+#!/bin/zsh
+
+#This script was shamelessly stolen from Luke Smith @  
+# Feed script a url or file location.
+# If an image, it will view in sxiv,
+# if a video or gif, it will view in mpv
+# if a music file or pdf, it will download,
+# otherwise it opens link in browser.
+
+# If no url given. Opens browser. For using script as surf.
+[ -z "$1" ] && { surf; exit; }
+
+case "$1" in
+	*mkv|*webm|*mp4|*youtube.com*|*youtu.be*|*hooktube.com*|*bitchute.com*|*/videos/*)
+		setsid mpv --volume=30 --input-ipc-server=/tmp/mpvsoc$(date +%s) -quiet "$1" >/dev/null 2>&1 & ;;
+	*png|*jpg|*jpe|*jpeg|*gif|*feedburner*|*/images/*|*yimg*)
+		curl -sL "$1" > "/tmp/$(echo "$1" | sed "s/.*\///")" && sxiv -a "/tmp/$(echo "$1" | sed "s/.*\///")"  >/dev/null 2>&1 & ;;
+	*mp3|*flac|*opus|*mp3?source*)
+		setsid tsp curl -LO "$1" >/dev/null 2>&1 & ;;
+	*)
+		if [ -f "$1" ]; then "$TERMINAL" -e "$EDITOR $1"
+		else setsid surf "$1" >/dev/null 2>&1 & fi ;;
+esac

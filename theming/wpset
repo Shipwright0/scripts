@@ -1,0 +1,11 @@
+#!/usr/bin/zsh
+
+#Script to set wallpaper 
+
+#Variables
+
+wallpaper=~/syscomps/wallpaper/pinetrees.jpg
+
+#set wallpaper
+
+hsetroot -fill $wallpaper &
